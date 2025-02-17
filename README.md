@@ -1,96 +1,98 @@
 # Airflow ETL Pipeline for IoT Sensor Data
 
 ## Overview
-ETL pipeline processing IoT sensor data (temperature, pressure, vibration) using Apache Airflow. Features data validation, metrics calculation, and anomaly detection.
+ETL pipeline processing IoT sensor data (temperature, pressure, vibration) using Apache Airflow with Grafana monitoring dashboards.
 
 ## Features
 - Real-time sensor data simulation
-- Data validation with configurable rules
-- Anomaly detection and alerting
-- Metrics calculation and monitoring
+- Data validation and quality checks
 - Data transformation and aggregation
 - PostgreSQL storage
 - Scheduled execution (5-minute intervals)
+- Real-time monitoring with Grafana dashboards:
+  - Temperature trends by location
+  - Current pressure monitoring
+  - Vibration analysis
+  - Statistical overview
 
 ## Tech Stack
 - Apache Airflow 2.7.1
 - PostgreSQL 13
 - Python 3.8
 - Docker & Docker Compose
-- Pandas for data processing
-- JSON for data exchange
+- Grafana (latest)
 
 ## Project Structure
 ```
 airflow-etl-project/
 ├── dags/
 │   ├── scripts/
-│   │   ├── extract.py      # Data generation and extraction
-│   │   ├── transform.py    # Data transformation
-│   │   ├── load.py         # Database operations
-│   │   ├── validate.py     # Data validation
-│   │   ├── metrics.py      # Metrics calculation
-│   │   └── alerts.py       # Alerting system
-│   └── sensor_etl_dag.py   # Main DAG definition
+│   │   ├── extract.py
+│   │   ├── transform.py
+│   │   ├── load.py
+│   │   ├── validate.py
+│   │   ├── alerts.py
+│   │   └── metrics.py
+│   └── sensor_etl_dag.py
 ├── data/
-│   ├── raw/                # Raw sensor data
-│   ├── processed/          # Transformed data
-│   ├── validation/         # Validation results
-│   └── metrics/           # Calculated metrics
+│   ├── raw/
+│   └── processed/
+├── grafana/
+│   ├── provisioning/
+│   │   ├── dashboards/
+│   │   │   └── dashboard.yml
+│   │   └── datasources/
+│   │       └── postgresql.yml
+│   └── dashboards/
+│       └── sensor_metrics.json
 ├── docker/
 └── docker-compose.yml
 ```
 
-## Pipeline Details
-1. **Extract**: Generates simulated sensor data with configurable parameters
-2. **Validate**: Checks data quality and validates against predefined rules
-3. **Transform**: Cleans and aggregates sensor data
-4. **Calculate Metrics**: Computes statistics and detects anomalies
-5. **Load**: Stores processed data in PostgreSQL
-
 ## Setup
 1. Clone repository
-```bash
-git clone https://github.com/yourusername/airflow-etl-project.git
-cd airflow-etl-project
-```
-
 2. Install Docker and Docker Compose
-
-3. Configure environment:
+3. Run:
 ```bash
 echo "AIRFLOW_UID=50000" > .env
-```
-
-4. Start services:
-```bash
 docker-compose build
 docker-compose up -d
 ```
 
-## Monitoring
-Access Airflow UI: http://localhost:8080
-- Username: admin
-- Password: admin
+## Accessing Services
+* Airflow UI: http://localhost:8080
+   * Username: admin
+   * Password: admin
+* Grafana Dashboard: http://localhost:3000
+   * Username: admin
+   * Password: admin
 
-### Available Metrics
-- Temperature statistics (min, max, average)
-- Pressure trends
-- Vibration anomalies
-- Sensor health status
+## Pipeline Details
+1. Extract: Generates simulated sensor data
+2. Validate: Checks data quality and rules
+3. Transform: Aggregates and cleans data
+4. Calculate Metrics: Computes statistics and detects anomalies
+5. Load: Stores in PostgreSQL
+
+## Monitoring
+The Grafana dashboard provides:
+* Real-time temperature monitoring by location
+* Pressure gauge with thresholds
+* Vibration trend analysis
+* Statistical overview of all metrics
 
 ## Data Validation Rules
-- Temperature range: 15-40°C
-- Pressure range: 950-1050 hPa
-- Vibration range: 0-2 units
-- Timestamp validation
-- Sensor ID verification
+* Temperature range: 15-40°C
+* Pressure range: 950-1050 hPa
+* Vibration range: 0-2 units
+* Timestamp validation
+* Sensor ID verification
 
 ## Future Improvements
 - [x] Data validation
 - [x] Metrics calculation
 - [x] Alerting system
-- [ ] Grafana dashboards
+- [x] Grafana dashboards
 - [ ] AWS integration
 - [ ] Unit tests
 - [ ] API documentation
